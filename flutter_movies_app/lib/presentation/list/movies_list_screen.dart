@@ -22,14 +22,12 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         future: moviesRepo.getUpcomingMovies(limit: 10, page: 1),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print("From the if statement: ${snapshot.hasData}");
             return ListView(
               children: List.generate(snapshot.data!.length, (index) => ListTile(title: Text(snapshot.data![index].title))),);
           } else if (snapshot.hasError) {
       print("Error: ${snapshot.error}");
       return const Text("Error loading data");
     } else {
-            print("From the else statement: ${snapshot.hasData}");
             return const LinearProgressIndicator();
           }
         }
