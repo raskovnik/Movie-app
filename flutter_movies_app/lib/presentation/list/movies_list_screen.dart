@@ -19,6 +19,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   final PagingController<int, Movie> _pagingController =
       PagingController(firstPageKey: 1);
 
+  late final Future<void> _future;
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +28,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     _model = MoviesListModel(
         log: Provider.of<Logger>(context, listen: false),
         moviesRepo: Provider.of<MoviesRepository>(context, listen: false));
+
+    _future = _checkNewData();
 
     _pagingController.addPageRequestListener((pageKey) async {
       try {
@@ -42,23 +46,46 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     _pagingController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text("Upcoming Movies")),
-        body: PagedListView<int, Movie>(
-          pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<Movie>(
-            itemBuilder: (context, movie, index) => Container(
-              padding: const EdgeInsets.only(
-                      left: 8.0,
-                      top: 8.0,
-                      right: 16.0,
-                      bottom: 8.0,
-                    ),
-                    child: MoviePreview(movie: movie),
-            )
-          )
+        body: FutureBuilder(
+          future: _future,
+          builder: (context, snapshot) => RefreshIndicator(
+            onRefresh: _refresh,
+            child: PagedListView<int, Movie>(
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<Movie>(
+                    itemBuilder: (context, movie, index) => Container(
+                          padding: const EdgeInsets.only(
+                            left: 8.0,
+                            top: 8.0,
+                            right: 16.0,
+                            bottom: 8.0,
+                          ),
+                          child: MoviePreview(movie: movie),
+                        ))),
+          ),
         ));
+  }
+
+  Future<void> _refresh() async {
+    await _model.deletePersistedMovies();
+    _pagingController.refresh();
+  }
+
+  Future<void> _checkNewData() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final hasNewData = await _model.hasNewData();
+
+      if (hasNewData) {
+        scaffoldMessenger.showSnackBar(SnackBar(
+            content: const Text("Refresh to obtain the new available data"),
+            action: SnackBarAction(label: "Refresh", onPressed: _refresh)));
+      }
+    });
   }
 }

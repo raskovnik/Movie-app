@@ -16,4 +16,22 @@ class MoviesListModel {
       rethrow;
     }
   }
+
+  Future<void> deletePersistedMovies() async {
+    try {
+      await moviesRepo.deleteAll();
+    } catch (e) {
+      log.e("Error when deleting movies", error: e);
+      rethrow;
+    }
+  }
+
+  Future<bool> hasNewData() async {
+    try {
+      return await moviesRepo.checkNewData();
+    } catch (e) {
+      log.e("Error when checking for new data", error: e);
+      return true;
+    }
+  }
 }

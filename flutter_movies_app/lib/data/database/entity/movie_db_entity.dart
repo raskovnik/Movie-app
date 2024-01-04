@@ -10,7 +10,7 @@ class MovieDbEntity {
   static const fieldTitle = "movie_title";
   static const fieldImageUrl = "movie_image_url";
   static const fieldReleaseDate = "movie_release_date";
-  
+
   @JsonKey(name: fieldId)
   final int? id;
   @JsonKey(name: fieldMovieId)
@@ -30,7 +30,8 @@ class MovieDbEntity {
     required this.releaseDate,
   });
 
-  factory MovieDbEntity.fromJson(Map<String, dynamic> json) => _$MovieDbEntityFromJson(json);
+  factory MovieDbEntity.fromJson(Map<String, dynamic> json) =>
+      _$MovieDbEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieDbEntityToJson(this);
 }

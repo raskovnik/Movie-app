@@ -32,7 +32,8 @@ class ApiClient {
     );
 
     if (response.statusCode != null && response.statusCode! >= 400) {
-      throw NetworkException(statusCode: response.statusCode!, message: response.statusMessage);
+      throw NetworkException(
+          statusCode: response.statusCode!, message: response.statusMessage);
     } else if (response.statusCode != null) {
       return UpcomingMovies.fromJson(response.data as Map<String, dynamic>);
     } else {

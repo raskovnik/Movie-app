@@ -35,12 +35,11 @@ class DatabaseMapper {
   MovieDbEntity toMovieDbEntity(Movie movie) {
     try {
       return MovieDbEntity(
-        id: null,
-        movieId: movie.id,
-        title: movie.title,
-        imageUrl: movie.imageUrl,
-        releaseDate: movie.releaseDate.millisecondsSinceEpoch
-      );
+          id: null,
+          movieId: movie.id,
+          title: movie.title,
+          imageUrl: movie.imageUrl,
+          releaseDate: movie.releaseDate.millisecondsSinceEpoch);
     } catch (e) {
       throw MapperException<Movie, MovieDbEntity>(e.toString());
     }

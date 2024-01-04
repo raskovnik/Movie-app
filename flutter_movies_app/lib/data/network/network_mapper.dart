@@ -11,15 +11,14 @@ class NetworkMapper {
   Movie toMovie(MovieEntity entity) {
     try {
       return Movie(
-        id: entity.id,
-        title: entity.titleText.text,
-        imageUrl: entity.primaryImage?.url,
-        releaseDate: DateTime(
-          entity.releaseDate.year,
-          entity.releaseDate.month,
-          entity.releaseDate.day,
-        )
-      );
+          id: entity.id,
+          title: entity.titleText.text,
+          imageUrl: entity.primaryImage?.url,
+          releaseDate: DateTime(
+            entity.releaseDate.year,
+            entity.releaseDate.month,
+            entity.releaseDate.day,
+          ));
     } catch (e) {
       throw MapperException<MovieEntity, Movie>(e.toString());
     }

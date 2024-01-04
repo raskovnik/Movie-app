@@ -4,5 +4,6 @@ class NetworkException implements Exception {
 
   NetworkException({required this.statusCode, this.message});
 
-  String toString() => "NetworkException: status code $statusCode. message: $message";
+  String toString() =>
+      "NetworkException: status code $statusCode. message: $message";
 }
